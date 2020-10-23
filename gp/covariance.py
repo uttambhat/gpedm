@@ -16,4 +16,5 @@ def covariance(X,additional_inputs):
     covariance_matrix : (n x n) numpy array
 
     """
+    return sp.spatial.distance.pdist(X)
     
