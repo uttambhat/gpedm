@@ -1,7 +1,7 @@
 import numpy as np
-import scipy as sp
+from scipy.spatial.distance import cdist,pdist
 
-def covariance(X,additional_inputs):
+def covariance(X1,X2,phi,tau):
     """
     Parameters
     ----------
@@ -16,5 +16,6 @@ def covariance(X,additional_inputs):
     covariance_matrix : (n x n) numpy array
 
     """
-    return sp.spatial.distance.pdist(X)
+    return np.power(tau,2)*np.exp(-np.square(cdist(X*phi,X*phi)))
     
+
