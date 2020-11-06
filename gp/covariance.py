@@ -16,6 +16,6 @@ def covariance(X1,X2,phi,tau):
     covariance_matrix : (n x n) numpy array
 
     """
-    return np.power(tau,2)*np.exp(-np.square(cdist(X*phi,X*phi)))
+    return np.square(tau)*np.exp(-np.square(cdist(X1*phi,X2*phi)))
     
 
