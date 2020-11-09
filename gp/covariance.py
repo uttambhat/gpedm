@@ -1,7 +1,7 @@
 import numpy as np
 from scipy.spatial.distance import pdist,squareform,cdist
 
-def covariance(X,inv_lengthscale,amplitude=1.,locations=None,spatial_decayrate=None,eval_gradient=False):
+def covariance(X,inv_lengthscale,amplitude=1.,locations=None,spatial_decayrate=None,site_indices=None,hierarch_scale=None,eval_gradient=False):
     """
     Description
     -----------
@@ -16,6 +16,7 @@ def covariance(X,inv_lengthscale,amplitude=1.,locations=None,spatial_decayrate=N
     amplitude : Amplitude of the squared exponential kernel
     locations : (n x k) numpy array of spatial locations or a tuple of (n1 x k) and (n2 x k) numpy arrays
     spatial_decayrate : scalar or (k,) shaped numpy array of inverse length-scales for spatial locations
+    site_indices : (n x k) numpy array of site indices or a tuple of (n1 x k) and (n2 x k) numpy arrays
     
     Returns
     -------
@@ -26,14 +27,16 @@ def covariance(X,inv_lengthscale,amplitude=1.,locations=None,spatial_decayrate=N
         lnC = (pdist(X*inv_lengthscale))**2
         if locations!=None:
             lnC += (pdist(locations*spatial_decayrate))**2
-        
+        if site_indices!=None:
+            lnC += hierarch_scale*(pdist(site_indices)>0)
         return squareform((amplitude**2)*np.exp(-0.5*lnC))
         
     else:
         lnC=(cdist(X[0]*inv_lengthscale,X[1]*inv_lengthscale))**2
         if locations!=None:
             lnC += (cdist(locations[0]*spatial_decayrate,locations[1]*spatial_decayrate))**2
-        
+        if site_indices!=None:
+            lnC += hierarch_scale*(cdist(site_indices[0],site_indices[1])>0)
         return (amplitude**2)*np.exp(-0.5*lnC)
     
 
