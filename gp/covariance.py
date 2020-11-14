@@ -1,7 +1,7 @@
 import numpy as np
 from scipy.spatial.distance import pdist,squareform,cdist
 
-def covariance(X,inv_lengthscale,amplitude=1.,locations=None,spatial_decayrate=None,eval_gradient=False):
+def covariance(X,eval_gradient=False):
     """
     Description
     -----------
@@ -22,6 +22,7 @@ def covariance(X,inv_lengthscale,amplitude=1.,locations=None,spatial_decayrate=N
     covariance_matrix : (n x n) numpy array
     
     """
+    #inv_lengthscale,amplitude=1.,locations=None,spatial_decayrate=None
     if type(X)!=tuple:
         lnC = (pdist(X*inv_lengthscale))**2
         if locations!=None:
