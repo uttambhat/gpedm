@@ -23,6 +23,7 @@ def covariance(X,inv_lengthscale,amplitude=1.,locations=None,spatial_decayrate=N
     covariance_matrix : (n x n) numpy array
     
     """
+    #inv_lengthscale,amplitude=1.,locations=None,spatial_decayrate=None
     if type(X)!=tuple:
         lnC = (pdist(X*inv_lengthscale))**2
         if locations!=None:
@@ -39,4 +40,8 @@ def covariance(X,inv_lengthscale,amplitude=1.,locations=None,spatial_decayrate=N
             lnC += hierarch_scale*(cdist(site_indices[0],site_indices[1])>0)
         return (amplitude**2)*np.exp(-0.5*lnC)
     
-
+    if(eval_gradient):
+        
+        return cov,cov_gradient
+    else:
+        return cov
