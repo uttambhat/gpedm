@@ -1,7 +1,7 @@
 import numpy as np
 from scipy.spatial.distance import pdist,squareform,cdist
 
-def covariance(X,inv_lengthscale,amplitude=1.,locations=None,spatial_decayrate=None,site_indices=None,hierarch_scale=None,eval_gradient=False):
+def covariance(X,phi,tau=1.,locs=None,rate=None,site=None,rho=None,eval_gradient=False):
     """
     Description
     -----------
@@ -12,36 +12,37 @@ def covariance(X,inv_lengthscale,amplitude=1.,locations=None,spatial_decayrate=N
     X : (n x m) numpy array or a tuple of (n1 x m) and (n2 x m) numpy arrays
         The n rows are the different datapoints and the m columns represent
         the different features
-    inv_lengthscale : scalar or (m,) shaped numpy array of inverse length-scales 
-    amplitude : Amplitude of the squared exponential kernel
-    locations : (n x k) numpy array of spatial locations or a tuple of (n1 x k) and (n2 x k) numpy arrays
-    spatial_decayrate : scalar or (k,) shaped numpy array of inverse length-scales for spatial locations
-    site_indices : (n x k) numpy array of site indices or a tuple of (n1 x k) and (n2 x k) numpy arrays
+    phi : scalar or (m,) shaped numpy array of inverse length-scales 
+    tau : tau of the squared exponential kernel
+    locs : (n x k) numpy array of spatial locs or a tuple of (n1 x k) and (n2 x k) numpy arrays
+    rate : scalar or (k,) shaped numpy array of inverse length-scales for spatial locs
+    site : (n x k) numpy array of site indices or a tuple of (n1 x k) and (n2 x k) numpy arrays
     
     Returns
     -------
-    covariance_matrix : (n x n) numpy array
+    cov : (n x n) numpy array
+    cov_grad : NOTE CODED YET!!!
     
     """
-    #inv_lengthscale,amplitude=1.,locations=None,spatial_decayrate=None
+    #phi,tau=1.,locs=None,rate=None
     if type(X)!=tuple:
-        lnC = (pdist(X*inv_lengthscale))**2
-        if locations!=None:
-            lnC += (pdist(locations*spatial_decayrate))**2
-        if site_indices!=None:
-            lnC += hierarch_scale*(pdist(site_indices)>0)
-        return squareform((amplitude**2)*np.exp(-0.5*lnC))
+        lnC = (pdist(X*phi))**2
+        if locs!=None:
+            lnC += (pdist(locs*rate))**2
+        if site!=None:
+            lnC += rho*(pdist(site)>0)
+        cov = squareform((tau**2)*np.exp(-0.5*lnC))
         
     else:
-        lnC=(cdist(X[0]*inv_lengthscale,X[1]*inv_lengthscale))**2
-        if locations!=None:
-            lnC += (cdist(locations[0]*spatial_decayrate,locations[1]*spatial_decayrate))**2
-        if site_indices!=None:
-            lnC += hierarch_scale*(cdist(site_indices[0],site_indices[1])>0)
-        return (amplitude**2)*np.exp(-0.5*lnC)
+        lnC=(cdist(X[0]*phi,X[1]*phi))**2
+        if locs!=None:
+            lnC += (cdist(locs[0]*rate,locs[1]*rate))**2
+        if site!=None:
+            lnC += rho*(cdist(site[0],site[1])>0)
+        cov = (tau**2)*np.exp(-0.5*lnC)
     
     if(eval_gradient):
         
-        return cov,cov_gradient
+        return cov,cov_grad
     else:
         return cov
