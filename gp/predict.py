@@ -1,7 +1,7 @@
 import numpy as np
 from .covariance import *
 
-def predict(X,X_train,y_train,phi,tau=1.,return_std=False,return_cov=False):
+def predict(X,X_train,y_train,phi,tau=1.,Ve=1.e-10,return_std=False,return_cov=False):
     """
     Description
     -----------
@@ -25,8 +25,8 @@ def predict(X,X_train,y_train,phi,tau=1.,return_std=False,return_cov=False):
     cov_y : (n x n) numpy array of covariances on predictions
     
     """
-    K_Xtrain_Xtrain = covariance(X,phi,tau)
+    K_Xtrain_Xtrain = covariance((X_train,X_train),phi,tau)
     K_X_Xtrain = covariance((X,X_train),phi,tau)
-    return K_X_Xtrain@np.linalg.inv(K_X_train_X_train)@y_train
+    return K_X_Xtrain@np.linalg.inv(K_Xtrain_Xtrain+Ve*np.eye(len(X_train)))@y_train
 
 
