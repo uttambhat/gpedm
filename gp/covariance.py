@@ -32,6 +32,7 @@ def covariance(X,phi,tau=1.,locs=None,rate=None,site=None,rho=None,eval_gradient
         if site!=None:
             lnC += rho*(pdist(site)>0)
         cov = squareform((tau**2)*np.exp(-0.5*lnC))
+        np.fill_diagonal(cov,tau**2)
         
     else:
         lnC=(cdist(X[0]*phi,X[1]*phi))**2
