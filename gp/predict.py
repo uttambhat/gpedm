@@ -1,5 +1,5 @@
 import numpy as np
-from covariance import *
+from .covariance import *
 
 def predict(X,X_train,y_train,phi,tau=1.,return_std=False,return_cov=False):
     """
