@@ -22,3 +22,9 @@ def log_marginal_likelihood(X_train,y_train,phi,tau=1.,Ve=1.e-10):
     log_marginal_likelihood : scalar
     
     """
+    n = len(X_train)
+    Ksigma = covariance(X_train,phi,tau)+Ve*np.eye(n)
+    Ksigmainv = np.linalg.inv(K)
+    Kdet = np.linalg.det(Ksigma)
+    log_likelihood = -0.5*y_train.T@Ksigmainv@y_train - 0.5*np.log(Kdet) - (n/2.)*np.log(2.*np.pi)
+    return log_likelihood
