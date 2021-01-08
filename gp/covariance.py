@@ -1,7 +1,8 @@
 import numpy as np
 from scipy.spatial.distance import pdist,squareform,cdist
 
-def covariance(X,phi,tau=1.,locs=None,rate=None,site=None,rho=None,eval_gradient=False):
+#seems like we don't want the eval_gradient=False argument here if we are writing separate functions for likelihood and gradient calculation
+def covariance(X,phi,tau=None,locs=None,rate=None,site=None,rho=None,eval_gradient=False):
     """
     Description
     -----------
@@ -17,6 +18,7 @@ def covariance(X,phi,tau=1.,locs=None,rate=None,site=None,rho=None,eval_gradient
     locs : (n x k) numpy array of spatial locs or a tuple of (n1 x k) and (n2 x k) numpy arrays
     rate : scalar or (k,) shaped numpy array of inverse length-scales for spatial locs
     site : (n x k) numpy array of site indices or a tuple of (n1 x k) and (n2 x k) numpy arrays
+    rho : scalar of correlation of mean function between sites
     
     Returns
     -------
